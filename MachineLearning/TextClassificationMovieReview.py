@@ -34,8 +34,8 @@ vocab_size = 88000
 model = keras.Sequential()
 model.add(keras.layers.Embedding(vocab_size, 16))
 model.add(keras.layers.GlobalAveragePooling1D())
-model.add(keras.layers.Dense(16, activation='relu'))
-model.add(keras.layers.Dense(1, activation='sigmoid'))
+model.add(keras.layers.Dense(16, activation=tf.nn.relu))
+model.add(keras.layers.Dense(1, activation=tf.nn.sigmoid))
 
 model.summary()
 
@@ -49,13 +49,24 @@ partial_x_train = train_data[10000:]
 y_val = train_labels[:10000]
 partial_y_train = train_labels[10000:]
 
-FitModel = model.fit(partial_x_train,
+
+history = model.fit(partial_x_train,
                     partial_y_train,
                     epochs=20 ,
                     batch_size=512,
                     validation_data=(x_val, y_val),
                     verbose=1)
 
-results = model.evaluate(test_data, test_labels)
+model.save('model.h5')
+loaded_model = tf.keras.models.load_model('model.h5') 
 
-model.save("movieprediction.h5")
+results = loaded_model.evaluate(test_data, test_labels)
+
+print(results)
+
+for i in range(30):
+    results = loaded_model.predict(test_data[i])
+    print(str(results[1]))
+    print(test_labels[i])
+
+
