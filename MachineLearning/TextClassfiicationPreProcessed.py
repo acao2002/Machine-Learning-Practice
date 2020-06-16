@@ -56,6 +56,7 @@ model.summary()
 
 num_epochs = 20
 history = model.fit(training_padded, training_labels, epochs=num_epochs, validation_data=(testing_padded, testing_labels), verbose=2)
+model.save('NewsTitle-sarcasmDetection.h5')
 
 sentence = ["granny starting to fear spiders in the garden might be real", "you are too smart to work here","some people appear bright until they speak","Be a smart ass to a guy seven levels above you at your company See how that works out"]
 sequences = tokenizer.texts_to_sequences(sentence)
